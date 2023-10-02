@@ -27,13 +27,13 @@ public class UserControllerTests {
         try {
             userController.createUser(user1);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         try {
             userController.createUser(user2);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -46,7 +46,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
@@ -61,13 +61,13 @@ public class UserControllerTests {
         try {
             userController.createUser(user1);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         try {
             userController.createUser(user2);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -80,7 +80,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
@@ -94,7 +94,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -107,7 +107,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
@@ -121,7 +121,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");

@@ -26,7 +26,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -39,7 +39,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -61,7 +61,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -74,7 +74,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -90,7 +90,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -105,7 +105,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -121,13 +121,13 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film1);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         try {
             filmController.addFilm(film2);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -141,7 +141,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-
+            System.out.println(exception.getMessage());
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
