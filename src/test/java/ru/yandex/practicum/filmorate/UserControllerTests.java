@@ -1,0 +1,130 @@
+package ru.yandex.practicum.filmorate;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.Controllers.UserController;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.ValidationException;
+
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class UserControllerTests {
+
+    UserController userController;
+
+    @BeforeEach
+    public void initTests() {
+        userController = new UserController();
+    }
+
+    @Test
+    public void addUserWithIncorrectEmail() {
+        User user1 = new User(" yandex.ru ", "login", "name", LocalDate.now().minusYears(25));
+        User user2 = new User(" ", "login", "name", LocalDate.now().minusYears(25));
+
+        try {
+            userController.createUser(user1);
+        } catch (ValidationException exception) {
+
+        }
+
+        try {
+            userController.createUser(user2);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
+    }
+
+    @Test
+    public void addUserWithCorrectEmail() {
+        User user = new User("name@yandex.ru", "login", "name", LocalDate.now().minusYears(25));
+
+        try {
+            userController.createUser(user);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
+        assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
+    }
+
+    @Test
+    public void addUserWithIncorrectLogin() {
+        User user1 = new User("name@yandex.ru", "login me", "name", LocalDate.now().minusYears(25));
+        User user2 = new User("name@yandex.ru", "  ", "name", LocalDate.now().minusYears(25));
+
+        try {
+            userController.createUser(user1);
+        } catch (ValidationException exception) {
+
+        }
+
+        try {
+            userController.createUser(user2);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
+    }
+
+    @Test
+    public void addUserWithCorrectLogin() {
+        User user = new User("name@yandex.ru", "login", "name", LocalDate.now().minusYears(25));
+
+        try {
+            userController.createUser(user);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
+        assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
+    }
+
+    @Test
+    public void addUserWithIncorrectBirthday() {
+        User user = new User("name@yandex.ru", "login me", "name", LocalDate.now().plusDays(1));
+
+        try {
+            userController.createUser(user);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
+    }
+
+    @Test
+    public void addUserWithCorrectBirthday() {
+        User user = new User("name@yandex.ru", "login", "name", LocalDate.now().minusDays(1));
+
+        try {
+            userController.createUser(user);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
+        assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
+    }
+
+    @Test
+    public void addUserWithoutName() {
+        User user = new User("name@yandex.ru", "login", "  ", LocalDate.now().minusDays(1));
+
+        try {
+            userController.createUser(user);
+        } catch (ValidationException exception) {
+
+        }
+
+        assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
+        assertEquals("login", userController.getUsers().get(0).getName(), "Некорректное имя");
+    }
+}
