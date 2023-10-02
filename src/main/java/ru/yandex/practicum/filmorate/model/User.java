@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -9,6 +10,13 @@ import java.time.LocalDate;
 @Data
 public class User {
 
+    public User(String email, String login, String name, LocalDate birthday) {
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
+
     private Integer id;
 
     @EqualsAndHashCode.Exclude
@@ -17,7 +25,6 @@ public class User {
     @EqualsAndHashCode.Exclude
     private final String login;
 
-    @NonNull
     @EqualsAndHashCode.Exclude
     private String name;
 
