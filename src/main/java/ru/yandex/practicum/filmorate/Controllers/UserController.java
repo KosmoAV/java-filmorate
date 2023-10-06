@@ -49,7 +49,7 @@ public class UserController {
         return new ArrayList<>(users.values());
     }
 
-    private Integer generateId () {
+    private Integer generateId() {
         return ++userId;
     }
 

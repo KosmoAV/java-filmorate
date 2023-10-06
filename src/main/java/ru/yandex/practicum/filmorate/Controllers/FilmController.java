@@ -49,7 +49,7 @@ public class FilmController {
         return new ArrayList<>(films.values());
     }
 
-    private Integer generateId () {
+    private Integer generateId() {
         return ++filmId;
     }
 
