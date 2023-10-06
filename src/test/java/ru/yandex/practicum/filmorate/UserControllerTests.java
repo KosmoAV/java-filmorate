@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.ValidationException;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UserControllerTests {
 
@@ -27,13 +28,13 @@ public class UserControllerTests {
         try {
             userController.createUser(user1);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректный e-mail", exception.getMessage());
         }
 
         try {
             userController.createUser(user2);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректный e-mail", exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -46,7 +47,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
@@ -61,13 +62,13 @@ public class UserControllerTests {
         try {
             userController.createUser(user1);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректный логин", exception.getMessage());
         }
 
         try {
             userController.createUser(user2);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректный логин", exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -80,7 +81,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
@@ -89,12 +90,12 @@ public class UserControllerTests {
 
     @Test
     public void addUserWithIncorrectBirthday() {
-        User user = new User("name@yandex.ru", "login me", "name", LocalDate.now().plusDays(1));
+        User user = new User("name@yandex.ru", "login", "name", LocalDate.now().plusDays(1));
 
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректная дата рождения", exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -107,7 +108,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
@@ -121,7 +122,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");

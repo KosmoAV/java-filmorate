@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.ValidationException;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmControllerTests {
 
@@ -26,7 +26,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+           assertEquals("Некорректное название фильма", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -34,12 +34,12 @@ public class FilmControllerTests {
 
     @Test
     public void addFilmWithCorrectName() {
-        Film film = new Film(" First", "description", LocalDate.now().minusDays(10), 120);
+        Film film = new Film(" first", "description", LocalDate.now().minusDays(10), 120);
 
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -61,7 +61,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректное описание фильма", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -74,7 +74,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -90,7 +90,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректная дата релиза фильма", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -105,7 +105,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -121,13 +121,13 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film1);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректная продолжительность фильма", exception.getMessage());
         }
 
         try {
             filmController.addFilm(film2);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertEquals("Некорректная продолжительность фильма", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -141,7 +141,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            System.out.println(exception.getMessage());
+            assertNull(exception, "Неожиданное исключение");
         }
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
