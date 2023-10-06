@@ -30,7 +30,8 @@ public class UserController {
     public User createUser(@RequestBody User user) throws ValidationException {
         log.info("Получен запрос на создание пользователя");
         validateUser(user);
-        users.put(getId(user), user);
+        user.setId(generateId());
+        users.put(user.getId(), user);
         return user;
     }
 
@@ -48,13 +49,16 @@ public class UserController {
         return new ArrayList<>(users.values());
     }
 
-    private Integer getId(User user) {
-        int id = ++userId;
-        user.setId(id);
-        return id;
+    private Integer generateId () {
+        return ++userId;
     }
 
     private void validateUser(User user) throws ValidationException {
+
+        if (user.getEmail() == null || user.getLogin() == null || user.getBirthday() == null) {
+            log.error("Выброшено исключение");
+            throw new ValidationException("Поля пользователя не инициализированы");
+        }
 
         if (user.getId() != null && !users.containsKey(user.getId())) {
             log.error("Выброшено исключение");

@@ -30,7 +30,8 @@ public class FilmController {
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.info("Получен запрос на добавление фильма");
         validateFilm(film);
-        films.put(getId(film), film);
+        film.setId(generateId());
+        films.put(film.getId(), film);
         return film;
     }
 
@@ -48,13 +49,18 @@ public class FilmController {
         return new ArrayList<>(films.values());
     }
 
-    private Integer getId(Film film) {
-        int id = ++filmId;
-        film.setId(id);
-        return id;
+    private Integer generateId () {
+        return ++filmId;
     }
 
-    private void validateFilm(Film film) throws ValidationException {
+    public void validateFilm(Film film) throws ValidationException {
+
+        if (film.getName() == null || film.getDescription() == null || film.getReleaseDate() == null ||
+            film.getDuration() == null) {
+
+            log.error("Выброшено исключение");
+            throw new ValidationException("Поля фильма не инициализированы");
+        }
 
         if (film.getId() != null && !films.containsKey(film.getId())) {
             log.error("Выброшено исключение");
