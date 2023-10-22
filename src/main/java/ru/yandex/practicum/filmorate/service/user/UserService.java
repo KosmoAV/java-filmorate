@@ -16,7 +16,7 @@ public class UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserService (UserStorage userStorage) {
+    public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -47,7 +47,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    private void existsUser(Integer ... usersId) {
+    private void existsUser(Integer ...usersId) {
 
         for (Integer userId : usersId) {
             if (userStorage.getUser(userId) == null) {
