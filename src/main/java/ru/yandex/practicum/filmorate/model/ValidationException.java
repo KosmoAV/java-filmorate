@@ -1,21 +1,22 @@
 package ru.yandex.practicum.filmorate.model;
 
-import java.io.IOException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-public class ValidationException extends IOException {
-    public ValidationException() {
-        super();
+public class ValidationException extends ResponseStatusException {
+    public ValidationException(HttpStatus status) {
+        super(status);
     }
 
-    public ValidationException(String message) {
-        super(message);
+    public ValidationException(HttpStatus status, String reason) {
+        super(status, reason);
     }
 
-    public ValidationException(String message, Throwable cause) {
-        super(message, cause);
+    public ValidationException(HttpStatus status, String reason, Throwable cause) {
+        super(status, reason, cause);
     }
 
-    public ValidationException(Throwable cause) {
-        super(cause);
+    public ValidationException(int rawStatusCode, String reason, Throwable cause) {
+        super(rawStatusCode, reason, cause);
     }
 }

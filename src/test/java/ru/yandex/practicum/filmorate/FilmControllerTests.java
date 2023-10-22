@@ -2,9 +2,14 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.Controllers.FilmController;
+import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.ValidationException;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 
@@ -16,7 +21,9 @@ public class FilmControllerTests {
 
     @BeforeEach
     public void initTests() {
-        filmController = new FilmController();
+        FilmStorage filmStorage = new InMemoryFilmStorage();
+        UserStorage userStorage = new InMemoryUserStorage();
+        filmController = new FilmController(filmStorage, new FilmService(filmStorage, userStorage));
     }
 
     @Test
@@ -26,7 +33,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-           assertEquals("Некорректное название фильма", exception.getMessage());
+           assertEquals("400 BAD_REQUEST \"Некорректное название фильма\"", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -61,7 +68,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            assertEquals("Некорректное описание фильма", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректное описание фильма\"", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -90,7 +97,7 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film);
         } catch (ValidationException exception) {
-            assertEquals("Некорректная дата релиза фильма", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректная дата релиза фильма\"", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");
@@ -121,13 +128,13 @@ public class FilmControllerTests {
         try {
             filmController.addFilm(film1);
         } catch (ValidationException exception) {
-            assertEquals("Некорректная продолжительность фильма", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректная продолжительность фильма\"", exception.getMessage());
         }
 
         try {
             filmController.addFilm(film2);
         } catch (ValidationException exception) {
-            assertEquals("Некорректная продолжительность фильма", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректная продолжительность фильма\"", exception.getMessage());
         }
 
         assertEquals(0, filmController.getFilms().size(), "Неверное количество фильмов");

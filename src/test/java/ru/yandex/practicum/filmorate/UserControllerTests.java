@@ -2,9 +2,12 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.Controllers.UserController;
+import ru.yandex.practicum.filmorate.controllers.UserController;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.ValidationException;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 
@@ -17,7 +20,8 @@ public class UserControllerTests {
 
     @BeforeEach
     public void initTests() {
-        userController = new UserController();
+        UserStorage userStorage = new InMemoryUserStorage();
+        userController = new UserController(userStorage, new UserService(userStorage));
     }
 
     @Test
@@ -28,13 +32,13 @@ public class UserControllerTests {
         try {
             userController.createUser(user1);
         } catch (ValidationException exception) {
-            assertEquals("Некорректный e-mail", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректный e-mail\"", exception.getMessage());
         }
 
         try {
             userController.createUser(user2);
         } catch (ValidationException exception) {
-            assertEquals("Некорректный e-mail", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректный e-mail\"", exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -62,13 +66,13 @@ public class UserControllerTests {
         try {
             userController.createUser(user1);
         } catch (ValidationException exception) {
-            assertEquals("Некорректный логин", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректный логин\"", exception.getMessage());
         }
 
         try {
             userController.createUser(user2);
         } catch (ValidationException exception) {
-            assertEquals("Некорректный логин", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректный логин\"", exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
@@ -95,7 +99,7 @@ public class UserControllerTests {
         try {
             userController.createUser(user);
         } catch (ValidationException exception) {
-            assertEquals("Некорректная дата рождения", exception.getMessage());
+            assertEquals("400 BAD_REQUEST \"Некорректная дата рождения\"", exception.getMessage());
         }
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
