@@ -47,7 +47,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    private void existsUser(Integer ...usersId) {
+    private void existsUser(Integer...usersId) {
 
         for (Integer userId : usersId) {
             if (userStorage.getUser(userId) == null) {
