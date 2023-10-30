@@ -2,14 +2,15 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.Controllers.UserController;
+import ru.yandex.practicum.filmorate.controllers.UserController;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.ValidationException;
+import ru.yandex.practicum.filmorate.service.ValidationException;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserControllerTests {
 
@@ -17,7 +18,7 @@ public class UserControllerTests {
 
     @BeforeEach
     public void initTests() {
-        userController = new UserController();
+        userController = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
     @Test
@@ -25,17 +26,13 @@ public class UserControllerTests {
         User user1 = new User(" yandex.ru ", "login", "name", LocalDate.now().minusYears(25));
         User user2 = new User(" ", "login", "name", LocalDate.now().minusYears(25));
 
-        try {
-            userController.createUser(user1);
-        } catch (ValidationException exception) {
-            assertEquals("Некорректный e-mail", exception.getMessage());
-        }
+        ValidationException e = assertThrows(ValidationException.class, () -> userController.createUser(user1),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректный e-mail\"", e.getMessage());
 
-        try {
-            userController.createUser(user2);
-        } catch (ValidationException exception) {
-            assertEquals("Некорректный e-mail", exception.getMessage());
-        }
+        e = assertThrows(ValidationException.class, () -> userController.createUser(user2),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректный e-mail\"", e.getMessage());
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
     }
@@ -44,11 +41,7 @@ public class UserControllerTests {
     public void addUserWithCorrectEmail() {
         User user = new User("name@yandex.ru", "login", "name", LocalDate.now().minusYears(25));
 
-        try {
-            userController.createUser(user);
-        } catch (ValidationException exception) {
-            assertNull(exception, "Неожиданное исключение");
-        }
+        assertDoesNotThrow(() -> userController.createUser(user), "Выброшено исключение");
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
         assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
@@ -59,17 +52,13 @@ public class UserControllerTests {
         User user1 = new User("name@yandex.ru", "login me", "name", LocalDate.now().minusYears(25));
         User user2 = new User("name@yandex.ru", "  ", "name", LocalDate.now().minusYears(25));
 
-        try {
-            userController.createUser(user1);
-        } catch (ValidationException exception) {
-            assertEquals("Некорректный логин", exception.getMessage());
-        }
+        ValidationException e = assertThrows(ValidationException.class, () -> userController.createUser(user1),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректный логин\"", e.getMessage());
 
-        try {
-            userController.createUser(user2);
-        } catch (ValidationException exception) {
-            assertEquals("Некорректный логин", exception.getMessage());
-        }
+        e = assertThrows(ValidationException.class, () -> userController.createUser(user2),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректный логин\"", e.getMessage());
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
     }
@@ -78,11 +67,7 @@ public class UserControllerTests {
     public void addUserWithCorrectLogin() {
         User user = new User("name@yandex.ru", "login", "name", LocalDate.now().minusYears(25));
 
-        try {
-            userController.createUser(user);
-        } catch (ValidationException exception) {
-            assertNull(exception, "Неожиданное исключение");
-        }
+        assertDoesNotThrow(() -> userController.createUser(user), "Выброшено исключение");
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
         assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
@@ -92,11 +77,9 @@ public class UserControllerTests {
     public void addUserWithIncorrectBirthday() {
         User user = new User("name@yandex.ru", "login", "name", LocalDate.now().plusDays(1));
 
-        try {
-            userController.createUser(user);
-        } catch (ValidationException exception) {
-            assertEquals("Некорректная дата рождения", exception.getMessage());
-        }
+        ValidationException e = assertThrows(ValidationException.class, () -> userController.createUser(user),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректная дата рождения\"", e.getMessage());
 
         assertEquals(0, userController.getUsers().size(), "Неверное количество пользователей");
     }
@@ -105,11 +88,7 @@ public class UserControllerTests {
     public void addUserWithCorrectBirthday() {
         User user = new User("name@yandex.ru", "login", "name", LocalDate.now().minusDays(1));
 
-        try {
-            userController.createUser(user);
-        } catch (ValidationException exception) {
-            assertNull(exception, "Неожиданное исключение");
-        }
+        assertDoesNotThrow(() -> userController.createUser(user), "Выброшено исключение");
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
         assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
@@ -119,13 +98,31 @@ public class UserControllerTests {
     public void addUserWithoutName() {
         User user = new User("name@yandex.ru", "login", "  ", LocalDate.now().minusDays(1));
 
-        try {
-            userController.createUser(user);
-        } catch (ValidationException exception) {
-            assertNull(exception, "Неожиданное исключение");
-        }
+        assertDoesNotThrow(() -> userController.createUser(user), "Выброшено исключение");
 
         assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
         assertEquals("login", userController.getUsers().get(0).getName(), "Некорректное имя");
+    }
+
+    @Test
+    public void updateUserWithIncorrectId() {
+
+        User user1 = new User("first@yandex.ru", "login", "name", LocalDate.now().minusYears(25));
+        assertDoesNotThrow(() -> userController.createUser(user1), "Выброшено исключение");
+
+        User user2 = new User("second@yandex.ru", "login", "name", LocalDate.now().minusYears(25));
+
+        user2.setId(null);
+        ValidationException e = assertThrows(ValidationException.class, () -> userController.updateUser(user2),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректный id пользователя\"", e.getMessage());
+
+        user2.setId(0);
+        e = assertThrows(ValidationException.class, () -> userController.updateUser(user2),
+                "Исключение ValidationException не выброшено");
+        assertEquals("400 BAD_REQUEST \"Некорректный id пользователя\"", e.getMessage());
+
+        assertEquals(1, userController.getUsers().size(), "Неверное количество пользователей");
+        assertEquals(1, userController.getUsers().get(0).getId(), "Некорректный Id");
     }
 }
