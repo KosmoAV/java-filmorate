@@ -26,7 +26,7 @@ public class FilmControllerTests {
     public void addFilmWithIncorrectName() {
         Film film = new Film(" ", "description", LocalDate.now().minusDays(10), 120);
 
-        ValidationException e = assertThrows(ValidationException.class, ()->filmController.addFilm(film),
+        ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректное название фильма\"", e.getMessage());
 
@@ -37,7 +37,7 @@ public class FilmControllerTests {
     public void addFilmWithCorrectName() {
         Film film = new Film(" first", "description", LocalDate.now().minusDays(10), 120);
 
-        assertDoesNotThrow(()->filmController.addFilm(film), "Выброшено исключение");
+        assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
         assertEquals(1, filmController.getFilms().get(0).getId(), "Некорректный Id");
@@ -55,7 +55,7 @@ public class FilmControllerTests {
 
         Film film = new Film("first", stringBuilder.toString(), LocalDate.now().minusDays(10), 120);
 
-        ValidationException e = assertThrows(ValidationException.class, ()->filmController.addFilm(film),
+        ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректное описание фильма\"", e.getMessage());
 
@@ -66,7 +66,7 @@ public class FilmControllerTests {
     public void addFilmWithCorrectDescription() {
         Film film = new Film("first", "Descrition first", LocalDate.now().minusDays(10), 120);
 
-        assertDoesNotThrow(()->filmController.addFilm(film), "Выброшено исключение");
+        assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
         assertEquals(1, filmController.getFilms().get(0).getId(), "Некорректный Id");
@@ -78,7 +78,7 @@ public class FilmControllerTests {
 
         Film film = new Film("first", "First",date, 120);
 
-        ValidationException e = assertThrows(ValidationException.class, ()->filmController.addFilm(film),
+        ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректная дата релиза фильма\"", e.getMessage());
 
@@ -91,7 +91,7 @@ public class FilmControllerTests {
 
         Film film = new Film("first", "First",date, 120);
 
-        assertDoesNotThrow(()->filmController.addFilm(film), "Выброшено исключение");
+        assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
         assertEquals(1, filmController.getFilms().get(0).getId(), "Некорректный Id");
@@ -103,11 +103,11 @@ public class FilmControllerTests {
         Film film1 = new Film("first", "First",LocalDate.now(), 0);
         Film film2 = new Film("first", "First",LocalDate.now(), -1);
 
-        ValidationException e = assertThrows(ValidationException.class, ()->filmController.addFilm(film1),
+        ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film1),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректная продолжительность фильма\"", e.getMessage());
 
-        e = assertThrows(ValidationException.class, ()->filmController.addFilm(film2),
+        e = assertThrows(ValidationException.class, () -> filmController.addFilm(film2),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректная продолжительность фильма\"", e.getMessage());
 
@@ -119,7 +119,7 @@ public class FilmControllerTests {
 
         Film film = new Film("first", "First",LocalDate.now(), 1);
 
-        assertDoesNotThrow(()->filmController.addFilm(film), "Выброшено исключение");
+        assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
         assertEquals(1, filmController.getFilms().size(), "Неверное количество фильмов");
         assertEquals(1, filmController.getFilms().get(0).getId(), "Некорректный Id");
@@ -129,17 +129,17 @@ public class FilmControllerTests {
     public void updateFilmWithIncorrectId() {
 
         Film film1 = new Film("first", "First",LocalDate.now(), 1);
-        assertDoesNotThrow(()->filmController.addFilm(film1), "Выброшено исключение");
+        assertDoesNotThrow(() -> filmController.addFilm(film1), "Выброшено исключение");
 
         Film film2 = new Film("Second", "First",LocalDate.now(), 1);
 
         film2.setId(null);
-        ValidationException e = assertThrows(ValidationException.class, ()->filmController.updateFilm(film2),
+        ValidationException e = assertThrows(ValidationException.class, () -> filmController.updateFilm(film2),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректный id фильма\"", e.getMessage());
 
         film2.setId(0);
-        e = assertThrows(ValidationException.class, ()->filmController.updateFilm(film2),
+        e = assertThrows(ValidationException.class, () -> filmController.updateFilm(film2),
                 "Исключение ValidationException не выброшено");
         assertEquals("400 BAD_REQUEST \"Некорректный id фильма\"", e.getMessage());
 
