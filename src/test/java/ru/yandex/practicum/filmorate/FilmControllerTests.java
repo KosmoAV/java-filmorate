@@ -4,14 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.service.ValidationException;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-
 import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class FilmControllerTests {
 
@@ -24,7 +24,7 @@ public class FilmControllerTests {
 
     @Test
     public void addFilmWithIncorrectName() {
-        Film film = new Film(" ", "description", LocalDate.now().minusDays(10), 120);
+        Film film = new Film(" ", "description", LocalDate.now().minusDays(10), 120, new MPA(1, "1"));
 
         ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Исключение ValidationException не выброшено");
@@ -35,7 +35,7 @@ public class FilmControllerTests {
 
     @Test
     public void addFilmWithCorrectName() {
-        Film film = new Film(" first", "description", LocalDate.now().minusDays(10), 120);
+        Film film = new Film(" first", "description", LocalDate.now().minusDays(10), 120, new MPA(1, "1"));
 
         assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
@@ -53,7 +53,7 @@ public class FilmControllerTests {
 
         stringBuilder.append("!");
 
-        Film film = new Film("first", stringBuilder.toString(), LocalDate.now().minusDays(10), 120);
+        Film film = new Film("first", stringBuilder.toString(), LocalDate.now().minusDays(10), 120, new MPA(1, "1"));
 
         ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Исключение ValidationException не выброшено");
@@ -64,7 +64,7 @@ public class FilmControllerTests {
 
     @Test
     public void addFilmWithCorrectDescription() {
-        Film film = new Film("first", "Descrition first", LocalDate.now().minusDays(10), 120);
+        Film film = new Film("first", "Descrition first", LocalDate.now().minusDays(10), 120, new MPA(1, "1"));
 
         assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
@@ -76,7 +76,7 @@ public class FilmControllerTests {
     public void addFilmWithIncorrectReleaseDate() {
         LocalDate date = LocalDate.of(1895, 12, 28).minusDays(1);
 
-        Film film = new Film("first", "First",date, 120);
+        Film film = new Film("first", "First",date, 120, new MPA(1, "1"));
 
         ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Исключение ValidationException не выброшено");
@@ -89,7 +89,7 @@ public class FilmControllerTests {
     public void addFilmWithCorrectReleaseDate() {
         LocalDate date = LocalDate.of(1895, 12, 28).plusDays(1);
 
-        Film film = new Film("first", "First",date, 120);
+        Film film = new Film("first", "First",date, 120, new MPA(1, "1"));
 
         assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
@@ -100,8 +100,8 @@ public class FilmControllerTests {
     @Test
     public void addFilmWithIncorrectDuration() {
 
-        Film film1 = new Film("first", "First",LocalDate.now(), 0);
-        Film film2 = new Film("first", "First",LocalDate.now(), -1);
+        Film film1 = new Film("first", "First",LocalDate.now(), 0, new MPA(1, "1"));
+        Film film2 = new Film("first", "First",LocalDate.now(), -1, new MPA(1, "1"));
 
         ValidationException e = assertThrows(ValidationException.class, () -> filmController.addFilm(film1),
                 "Исключение ValidationException не выброшено");
@@ -117,7 +117,7 @@ public class FilmControllerTests {
     @Test
     public void addFilmWithCorrectDuration() {
 
-        Film film = new Film("first", "First",LocalDate.now(), 1);
+        Film film = new Film("first", "First",LocalDate.now(), 1, new MPA(1, "1"));
 
         assertDoesNotThrow(() -> filmController.addFilm(film), "Выброшено исключение");
 
@@ -128,10 +128,10 @@ public class FilmControllerTests {
     @Test
     public void updateFilmWithIncorrectId() {
 
-        Film film1 = new Film("first", "First",LocalDate.now(), 1);
+        Film film1 = new Film("first", "First",LocalDate.now(), 1, new MPA(1, "1"));
         assertDoesNotThrow(() -> filmController.addFilm(film1), "Выброшено исключение");
 
-        Film film2 = new Film("Second", "First",LocalDate.now(), 1);
+        Film film2 = new Film("Second", "First",LocalDate.now(), 1, new MPA(1, "1"));
 
         film2.setId(null);
         ValidationException e = assertThrows(ValidationException.class, () -> filmController.updateFilm(film2),

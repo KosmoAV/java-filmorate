@@ -2,9 +2,9 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
 
+import java.beans.ConstructorProperties;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @EqualsAndHashCode(of = {"id"})
@@ -20,16 +20,30 @@ public class Film {
 
     private final Integer  duration;
 
-    private final Integer rate;
+    private final List<Genre> genres;
+
+    private final MPA mpa;
 
     private final Set<Integer> likes;
 
-    public Film(String name, String description, LocalDate releaseDate, Integer duration) {
+    @ConstructorProperties({"name","description","releaseDate","duration", "mpa"})
+    public Film(String name, String description, LocalDate releaseDate, Integer duration, MPA mpa) {
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.rate = 0;
+        this.mpa = mpa;
+        this.genres = new ArrayList<>();
         this.likes = new HashSet<>();
+    }
+
+    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration, MPA mpa) {
+        this(name, description, releaseDate, duration, mpa);
+        this.id = id;
+    }
+
+    public Film setId(Integer id) {
+        this.id = id;
+        return this;
     }
 }

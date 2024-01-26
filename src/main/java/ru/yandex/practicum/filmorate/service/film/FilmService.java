@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
@@ -26,8 +25,8 @@ public class FilmService {
 
     public Film addFilm(Film film) throws ValidationException {
         validateFilm(film);
-        filmStorage.addFilm(film);
-        return film;
+
+        return filmStorage.addFilm(film);
     }
 
     public Film updateFilm(Film film) throws ValidationException {
@@ -35,8 +34,8 @@ public class FilmService {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Некорректный id фильма");
         }
         validateFilm(film);
-        filmStorage.updateFilm(film);
-        return film;
+
+        return filmStorage.updateFilm(film);
     }
 
     public List<Film> getFilms() {
@@ -61,13 +60,7 @@ public class FilmService {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Некорректный id пользователя");
         }
 
-        Film film = filmStorage.getFilm(id);
-
-        if (userStorage.getUser(userId) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь с id = " + id + " не найден");
-        }
-
-        film.getLikes().add(userId);
+        filmStorage.addLike(id, userId);
     }
 
     public void deleteLike(Integer id, Integer userId) {
@@ -80,13 +73,7 @@ public class FilmService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id пользователя");
         }
 
-        Film film = filmStorage.getFilm(id);
-
-        if (userStorage.getUser(userId) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь с id = " + id + " не найден");
-        }
-
-        film.getLikes().remove(userId);
+        filmStorage.deleteLike(id, userId);
     }
 
     public List<Film> getPopularFilms(Integer count) {
@@ -95,13 +82,7 @@ public class FilmService {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Некорректное количество популярных фильмов");
         }
 
-        return filmStorage.getFilms().stream()
-                .collect(Collectors.toMap(Film::getId, film -> film.getLikes().size()))
-                .entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .map(Map.Entry::getKey)
-                .map(filmStorage::getFilm)
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getPopularFilms(count);
     }
 
     private void validateFilm(Film film) throws ValidationException {
