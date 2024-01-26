@@ -38,8 +38,7 @@ public class MPAStorage {
         }
     }
 
-    private RowMapper<MPA> mapRowMaper()
-    {
+    private RowMapper<MPA> mapRowMaper() {
         return (rs, rowNum) -> {
             return new MPA(rs.getInt("id"), rs.getString("mpa"));
         };
