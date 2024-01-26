@@ -82,7 +82,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректный id пользователя");
         }
 
-        Set<Integer> setIds= userStorage.getUser(id).getFriends();
+        Set<Integer> setIds = userStorage.getUser(id).getFriends();
 
         if (setIds.isEmpty()) {
             return List.of();
