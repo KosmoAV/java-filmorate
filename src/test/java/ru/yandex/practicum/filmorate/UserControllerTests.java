@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import ru.yandex.practicum.filmorate.controllers.UserController;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.ValidationException;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@JdbcTest
 public class UserControllerTests {
 
     UserController userController;
@@ -115,7 +117,7 @@ public class UserControllerTests {
         user2.setId(null);
         ValidationException e = assertThrows(ValidationException.class, () -> userController.updateUser(user2),
                 "Исключение ValidationException не выброшено");
-        assertEquals("400 BAD_REQUEST \"Некорректный id пользователя\"", e.getMessage());
+        assertEquals("400 BAD_REQUEST \"Некорректный запрос или id пользователя\"", e.getMessage());
 
         user2.setId(0);
         e = assertThrows(ValidationException.class, () -> userController.updateUser(user2),

@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -24,27 +24,28 @@ public class UserService {
 
     public User createUser(User user) throws ValidationException {
         validateUser(user);
-        userStorage.createUser(user);
-        return user;
+        return userStorage.createUser(user);
     }
 
     public User updateUser(User user) throws ValidationException {
-        if (user.getId() == null) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Некорректный id пользователя");
+
+        if (user == null || user.getId() == null) {
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Некорректный запрос или id пользователя");
         }
+
         validateUser(user);
-        userStorage.updateUser(user);
-        return user;
+        return userStorage.updateUser(user);
     }
 
     public List<User> getUsers() {
+
         return userStorage.getUsers();
     }
 
     public User getUser(Integer id) {
 
         if (id == null || id < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id пользователя");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный запрос или id пользователя");
         }
         return userStorage.getUser(id);
     }
@@ -52,54 +53,65 @@ public class UserService {
     public void addFriend(Integer id, Integer friendId) {
 
         if (id == null || id < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id пользователя");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректный id пользователя");
         }
 
         if (friendId == null || friendId < 1) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id друга");
         }
 
-        userStorage.getUser(id).getFriends().add(friendId);
+        userStorage.addFriend(id, friendId);
     }
 
     public void deleteFriend(Integer id, Integer friendId) {
 
         if (id == null || id < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id пользователя");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректный id пользователя");
         }
 
         if (friendId == null || friendId < 1) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id друга");
         }
 
-        userStorage.getUser(id).getFriends().remove(friendId);
+        userStorage.deleteFriend(id, friendId);
     }
 
     public List<User> getFriends(Integer id) {
 
         if (id == null || id < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id пользователя");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректный id пользователя");
         }
 
-        return userStorage.getUser(id).getFriends().stream()
-                .map(userStorage::getUser)
-                .collect(Collectors.toList());
+        Set<Integer> setIds= userStorage.getUser(id).getFriends();
+
+        if (setIds.isEmpty()) {
+            return List.of();
+        }
+
+        Integer[] ids = setIds.toArray(new Integer[1]);
+
+        if (ids.length > 1) {
+            return userStorage.getUsers(ids);
+        }
+
+        return List.of(userStorage.getUser(ids[0]));
     }
 
     public List<User> getCommonFriends(Integer id, Integer otherId) {
 
         if (id == null || id < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id первого пользователя");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректный id первого пользователя");
         }
 
         if (otherId == null || otherId < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Некорректный id второго пользователя");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректный id второго пользователя");
         }
 
-        return userStorage.getUser(id).getFriends().stream()
-                .filter(userStorage.getUser(otherId).getFriends()::contains)
-                .map(userStorage::getUser)
-                .collect(Collectors.toList());
+        if (id.equals(otherId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректные id пользователей");
+        }
+
+        return userStorage.getCommonFriends(id, otherId);
     }
 
     private void validateUser(User user) throws ValidationException {

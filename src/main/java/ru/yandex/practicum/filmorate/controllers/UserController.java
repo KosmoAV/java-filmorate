@@ -50,14 +50,12 @@ public class UserController {
     public void addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("Получен запрос от пользователя id = {} на добавления в друзья пользователя id = {}", id, friendId);
         userService.addFriend(id, friendId);
-        userService.addFriend(friendId, id);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public void deleteFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("Получен запрос от пользователя id = {} на исключение из друзей пользователя id = {}", id, friendId);
         userService.deleteFriend(id, friendId);
-        userService.deleteFriend(friendId, id);
     }
 
     @GetMapping("/{id}/friends")
