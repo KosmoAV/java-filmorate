@@ -26,6 +26,7 @@ public class UserDbStorageTests {
     public void initTests() {
 
     }
+
     @Test
     public void createAndFindUserById() {
 
