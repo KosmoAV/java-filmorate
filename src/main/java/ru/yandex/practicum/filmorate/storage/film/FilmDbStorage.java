@@ -100,7 +100,7 @@ public class FilmDbStorage implements FilmStorage {
                 "ORDER BY frfg.id;";
 
         try {
-            return jdbcTemplate.queryForObject(sql , filmsRowMapper());
+            return jdbcTemplate.queryForObject(sql, filmsRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return List.of();
         } catch (DataAccessException e) {
@@ -263,8 +263,8 @@ public class FilmDbStorage implements FilmStorage {
         };
     }
 
-    private void insertFilmsGenre(List<Genre> genres, Integer filmId)
-    {
+    private void insertFilmsGenre(List<Genre> genres, Integer filmId) {
+
         if (genres != null && genres.size() > 0) {
 
             StringBuilder str = new StringBuilder();
