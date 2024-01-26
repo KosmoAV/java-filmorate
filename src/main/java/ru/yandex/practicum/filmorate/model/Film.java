@@ -42,7 +42,7 @@ public class Film {
         this.id = id;
     }
 
-    public Film setId(Integer id){
+    public Film setId(Integer id) {
         this.id = id;
         return this;
     }
