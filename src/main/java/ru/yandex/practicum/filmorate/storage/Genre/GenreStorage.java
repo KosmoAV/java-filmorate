@@ -38,8 +38,7 @@ public class GenreStorage {
         }
     }
 
-    private RowMapper<Genre> genreRowMaper()
-    {
+    private RowMapper<Genre> genreRowMaper() {
         return (rs, rowNum) -> {
             return new Genre(rs.getInt("id"), rs.getString("genre"));
         };
