@@ -32,8 +32,8 @@ public class UserDbStorage implements UserStorage {
     public User createUser(User user) throws ValidationException {
 
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getDataSource())
-                .withTableName("users")
-                .usingGeneratedKeyColumns("id");
+                    .withTableName("users")
+                    .usingGeneratedKeyColumns("id");
 
         Map<String, Object> params = Map.of("email", user.getEmail(),
                                             "login", user.getLogin(),
