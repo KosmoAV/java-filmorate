@@ -24,6 +24,7 @@ public class MPAStorageTests {
     public void initTests() {
 
     }
+
     @Test
     public void getMPA() {
 

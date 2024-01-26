@@ -24,6 +24,7 @@ public class GenreStorageTests {
     public void initTests() {
 
     }
+
     @Test
     public void getGenre() {
 
