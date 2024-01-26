@@ -72,7 +72,7 @@ public class UserDbStorage implements UserStorage {
                     "FROM users AS u " +
                     "LEFT OUTER JOIN users_friends AS f " +
                     "ON u.id = f.user_id " +
-                    "ORDER BY u.id;" , usersRowMapper());
+                    "ORDER BY u.id;", usersRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return List.of();
         } catch (DataAccessException e) {
