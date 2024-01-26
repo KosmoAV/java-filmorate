@@ -23,7 +23,8 @@ public class FilmDbStorageTests {
 
     @BeforeEach
     public void initTests() {
-
+        jdbcTemplate.update("DELETE FROM films;");
+        jdbcTemplate.update("ALTER TABLE films ALTER COLUMN id RESTART WITH 1");
     }
 
     @Test
